@@ -258,6 +258,9 @@
   footer { padding: 32px 48px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; color: rgba(244,239,230,0.4); }
   .signature { color: var(--acid); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; }
 
+  .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--acid); color: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; padding: 12px 24px; border-radius: 100px; opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none; z-index: 999; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
@@ -691,20 +694,6 @@
       <div class="mono">Recent</div>
       <div>
 
-        <a class="thought" href="writing/built-my-website-in-a-weekend/" itemscope itemtype="https://schema.org/BlogPosting">
-          <div class="thought-date mono"><time itemprop="datePublished" datetime="2026-05-11">11 May 2026</time></div>
-          <div class="thought-body">
-            <h3 itemprop="headline">I built my personal website in a weekend. Here's what that actually means.</h3>
-            <p class="lede" itemprop="description">What AI did, what I still had to do, and what it tells me about using these tools well.</p>
-            <div class="thought-meta">
-              <span>AI &amp; Personal Branding</span>
-              <span>·</span>
-              <span>5 min read</span>
-            </div>
-          </div>
-          <div class="thought-arrow">→</div>
-        </a>
-
         <a class="thought" href="writing/authentically-me/" itemscope itemtype="https://schema.org/BlogPosting">
           <div class="thought-date mono"><time itemprop="datePublished" datetime="2023-08-21">21 Aug 2023</time></div>
           <div class="thought-body">
@@ -758,7 +747,23 @@
               <span>4 min read</span>
             </div>
           </div>
+          <div class="thought-arrow">→</div>
         </a>
+
+        <a class="thought" href="writing/gpt-4-a-leap-forward/" itemscope itemtype="https://schema.org/BlogPosting">
+          <div class="thought-date mono"><time itemprop="datePublished" datetime="2023-03-23">23 Mar 2023</time></div>
+          <div class="thought-body">
+            <h3 itemprop="headline">GPT-4: A leap forward, exploring its enhanced capabilities.</h3>
+            <p class="lede" itemprop="description">An early-2023 look at what GPT-4 actually changed.</p>
+            <div class="thought-meta">
+              <span>AI &amp; Marketing</span>
+              <span>·</span>
+              <span>4 min read</span>
+            </div>
+          </div>
+          <div class="thought-arrow">→</div>
+        </a>
+
       </div>
     </div>
   </div>
@@ -793,7 +798,7 @@
 <section class="contact" id="contact" aria-labelledby="contact-heading">
   <h2 id="contact-heading" class="contact-big">Open to a<br/><em>conversation</em>.</h2>
   <div class="contact-links">
-    <a href="mailto:shaunthomasconsulting@gmail.com" class="contact-link" rel="me">Email →</a>
+    <a href="mailto:shaunthomasconsulting@gmail.com" class="contact-link" rel="me" id="email-link" data-email="shaunthomasconsulting@gmail.com">Email →</a>
     <a href="https://linkedin.com/in/shaun-cedric-thomas1111" class="contact-link" target="_blank" rel="noopener me">LinkedIn →</a>
     <a href="https://scholar.google.com/citations?user=SinO620AAAAJ" class="contact-link" target="_blank" rel="noopener">Google Scholar →</a>
   </div>
@@ -804,6 +809,22 @@
   <div class="signature mono">· 8888 ·</div>
   <div class="mono">Cape Town · South Africa</div>
 </footer>
+
+<div class="toast" id="toast">Email address copied</div>
+
+<script>
+  const emailLink = document.getElementById('email-link');
+  const toast = document.getElementById('toast');
+  emailLink.addEventListener('click', function() {
+    const email = this.dataset.email;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(() => {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      });
+    }
+  });
+</script>
 
 <script>
   const observer = new IntersectionObserver((entries) => {
