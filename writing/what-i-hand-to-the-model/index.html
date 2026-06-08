@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#0E1116" />
+<title>I said I was still figuring out AI. Here's where I've landed. · Shaun Cedric Thomas</title>
+
+<!-- Primary SEO -->
+<meta name="description" content="I said on my website I was still figuring out AI. Here's where I've landed: what I hand to a model, what I protect from it, and the line I've stopped crossing." />
+<meta name="author" content="Shaun Cedric Thomas" />
+<link rel="canonical" href="https://shauncedricthomas.com/writing/what-i-hand-to-the-model/" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="I said I was still figuring out AI. Here's where I've landed." />
+<meta property="og:description" content="I said on my website I was still figuring out AI. Here's where I've landed: what I hand to a model, what I protect from it, and the line I've stopped crossing." />
+<meta property="og:url" content="https://shauncedricthomas.com/writing/what-i-hand-to-the-model/" />
+<meta property="og:image" content="https://shauncedricthomas.com/images/og-image.jpg" />
+<meta property="article:author" content="Shaun Cedric Thomas" />
+<meta property="article:published_time" content="2026-06-08" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="I said I was still figuring out AI. Here's where I've landed." />
+<meta name="twitter:description" content="What I hand to a model, what I protect from it, and the line I've stopped crossing." />
+<meta name="twitter:image" content="https://shauncedricthomas.com/images/og-image.jpg" />
+
+<!-- Favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="../../images/favicon-32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="../../images/apple-touch-icon.png" />
+
+<!-- Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "I said I was still figuring out AI. Here's where I've landed.",
+  "description": "I said on my website I was still figuring out AI. Here's where I've landed: what I hand to a model, what I protect from it, and the line I've stopped crossing.",
+  "author": {
+    "@type": "Person",
+    "name": "Shaun Cedric Thomas",
+    "url": "https://shauncedricthomas.com/"
+  },
+  "datePublished": "2026-06-08",
+  "url": "https://shauncedricthomas.com/writing/what-i-hand-to-the-model/",
+  "image": "https://shauncedricthomas.com/images/og-image.jpg",
+  "publisher": {
+    "@type": "Person",
+    "name": "Shaun Cedric Thomas",
+    "url": "https://shauncedricthomas.com/"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #0E1116;
+    --paper: #F4EFE6;
+    --acid: #D4FF3D;
+    --amber: #E8722C;
+    --line: rgba(244,239,230,0.12);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; background: #0E1116; color-scheme: dark; }
+
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 350;
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    forced-color-adjust: none;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(12px);
+    background: rgba(14,17,22,0.7);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--paper);
+  }
+  .logo span { color: var(--acid); }
+  .logo small {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(244,239,230,0.4);
+    margin-left: 6px;
+    letter-spacing: 0.1em;
+  }
+
+  .nav-back {
+    color: var(--paper);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+  .nav-back:hover { opacity: 1; }
+
+  /* Article layout */
+  .article-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 160px 48px 120px;
+  }
+
+  /* Header */
+  .article-meta {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+
+  .article-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 6px 14px;
+    border: 1px solid var(--amber);
+    border-radius: 100px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .article-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(244,239,230,0.45);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .article-read {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(244,239,230,0.45);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .article-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(36px, 5.5vw, 64px);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    font-variation-settings: "opsz" 144;
+    margin-bottom: 40px;
+  }
+
+  .article-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--acid);
+  }
+
+  .article-lede {
+    font-size: 22px;
+    line-height: 1.45;
+    color: rgba(244,239,230,0.75);
+    margin-bottom: 64px;
+    padding-bottom: 64px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Body copy */
+  .article-body h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    color: var(--paper);
+    margin: 56px 0 20px;
+    line-height: 1.2;
+  }
+
+  .article-body p {
+    font-size: 19px;
+    line-height: 1.65;
+    color: rgba(244,239,230,0.85);
+    margin-bottom: 24px;
+    max-width: 680px;
+  }
+
+  .article-body p strong {
+    color: var(--paper);
+    font-weight: 500;
+  }
+
+  .article-body p:first-of-type::first-letter {
+    font-size: 72px;
+    float: left;
+    line-height: 0.85;
+    margin: 8px 14px 0 0;
+    color: var(--acid);
+    font-weight: 400;
+  }
+
+  /* Pull quote */
+  .pull-quote {
+    border-left: 2px solid var(--acid);
+    padding: 4px 0 4px 32px;
+    margin: 48px 0;
+  }
+
+  .pull-quote p {
+    font-family: 'Fraunces', serif;
+    font-size: 24px !important;
+    font-style: italic;
+    line-height: 1.4 !important;
+    color: var(--paper) !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Footer of article */
+  .article-footer {
+    margin-top: 80px;
+    padding-top: 48px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .author-line {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .author-portrait {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    filter: contrast(1.02) saturate(0.92);
+  }
+
+  .author-info .name {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+
+  .author-info .role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(244,239,230,0.45);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    color: var(--paper);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    width: fit-content;
+  }
+
+  .back-link:hover {
+    background: var(--acid);
+    color: var(--ink);
+    border-color: var(--acid);
+    transform: translateY(-2px);
+  }
+
+  .brand-link {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(212,255,61,0.4);
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+  .brand-link:hover { color: var(--acid); border-bottom-color: var(--acid); }
+
+  /* Page footer */
+  footer {
+    padding: 32px 48px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(244,239,230,0.4);
+  }
+
+  .signature { color: var(--acid); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .article-wrap { padding: 120px 24px 80px; }
+    .article-body p { font-size: 17px; }
+    .pull-quote p { font-size: 20px !important; }
+    footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav aria-label="Primary">
+  <a href="../../" class="logo">SCT<span>.</span><small>8888</small></a>
+  <a href="../../#thoughts" class="nav-back">← Writing</a>
+</nav>
+
+<main>
+  <article class="article-wrap" itemscope itemtype="https://schema.org/BlogPosting">
+
+    <header>
+      <div class="article-meta reveal">
+        <span class="article-tag">AI &amp; Marketing</span>
+        <span class="article-date"><time itemprop="datePublished" datetime="2026-06-08">8 June 2026</time></span>
+        <span class="article-read">5 min read</span>
+      </div>
+
+      <h1 class="article-title reveal" itemprop="headline">
+        I said I was still figuring out AI.<br/><em>Here's where I've landed.</em>
+      </h1>
+
+      <p class="article-lede reveal" itemprop="description">
+        On my homepage there's a line where I admit I'm still working out which parts of the work to hand to a model and which to protect from it. It's less true now. Here's the line I've found.
+      </p>
+    </header>
+
+    <div class="article-body" itemprop="articleBody">
+
+      <p class="reveal">On my homepage there's a line where I admit I'm still working out which parts of the work to hand to a model and which to protect from it. I wrote that a few months ago and left it deliberately unresolved, because it was true. It's less true now. I've spent enough days actually using these tools at work that I've started to feel where the line is, and I want to write it down before I pretend I always knew.</p>
+
+      <p class="reveal">This isn't a think piece about whether AI changes marketing. It obviously does. This is about the small, specific calls I make most days, and what they've taught me about where the tools earn their place and where they quietly make the work worse.</p>
+
+      <h2 class="reveal">Where I hand it over without hesitation</h2>
+
+      <p class="reveal">The clearest win has been the work that's real but not where my judgement lives.</p>
+
+      <p class="reveal">I teach part-time, and I recently used AI to turn course material into audio my students could listen to on the commute. Ten years ago that's a project. Now it's an afternoon. The students get something useful, and I spent my actual attention on the thing that mattered, which was deciding what was worth them hearing in the first place.</p>
+
+      <p class="reveal">It shows up in my day job the same way. Pulling a monthly review deck together, the numbers, the structure, the first pass at "what does this data say." A model gets me to a draft far faster than I'd get there alone. The grunt work of turning a spreadsheet into a narrative is exactly the kind of thing worth handing over.</p>
+
+      <p class="reveal">The pattern is simple. If the work is necessary but the value isn't in <strong>me</strong> doing it, the model does it. Audio conversion, first drafts, formatting, the scaffolding. None of that gets more "mine" by my doing it slowly.</p>
+
+      <h2 class="reveal">Where I've learned to protect the work</h2>
+
+      <p class="reveal">Then there's the other side, and this is the part I got wrong before I got it right.</p>
+
+      <p class="reveal">A few weeks back I was deep in an investment call on a partner's marketing portfolio. Some campaigns pacing well, a couple flagged at-risk, a real decision about where money should go. The model was excellent at laying out the options. It was confident, fast, and articulate about what the numbers suggested.</p>
+
+      <p class="reveal">And it was missing the thing that actually decides it.</p>
+
+      <p class="reveal">It couldn't feel the politics of the call. It didn't know which stakeholder had been burned last quarter, or that the "obvious" reallocation would land badly for reasons that have nothing to do with the data. It couldn't tell me that a number I was looking at was technically right and strategically misleading. That's the friction I wrote about on my homepage, the gap between what the data shows and what your gut knows, and a model will smooth that friction away every time if you let it. It's built to give you the clean answer. The job is often to resist it.</p>
+
+      <div class="pull-quote reveal">
+        <p>So I made the call myself. The model helped me see the board. It didn't move the pieces.</p>
+      </div>
+
+      <h2 class="reveal">The line I've stopped crossing</h2>
+
+      <p class="reveal">Here's the rule I've settled on, and it's narrower than "use AI for everything" and broader than "don't trust it."</p>
+
+      <p class="reveal">I don't hand a model anything where the output <strong>is</strong> the judgement. The investment decision, the point of view in a deck, the disagreement with the room. The moment the work stops being "produce the thing" and becomes "decide the thing," it's mine, and outsourcing it doesn't save time, it just launders my responsibility through a tool.</p>
+
+      <p class="reveal">The trap isn't using AI badly. It's using it for the wrong half of the job and not noticing, because the output looks finished. A confident, well-structured, completely wrong recommendation is more dangerous than a blank page. The blank page at least knows it's empty.</p>
+
+      <h2 class="reveal">What I tell people now</h2>
+
+      <p class="reveal">When someone asks me how to use these tools at work, I've stopped giving the abstract answer. The honest one is: figure out where your actual value sits, and protect that fiercely. Everything around it, the drafts, the formatting, the first ninety percent of the deck, hand it over and don't feel precious about it. But the judgement, the taste, the willingness to say the uncomfortable thing the data is dancing around? That's the job. That's the whole job. The model doesn't want it and can't do it.</p>
+
+      <p class="reveal">I spent years learning to read a number that didn't make sense and turn it into a conversation that did. AI has made the first part faster. It has made the second part more important than ever, because everyone now has access to the fast, clean, plausible answer. The edge has moved to the people who know when it's wrong.</p>
+
+      <p class="reveal">That's where I've landed. Ask me again in six months.</p>
+
+    </div>
+
+    <footer class="article-footer reveal">
+      <div class="author-line">
+        <img src="../../images/portrait.jpg" alt="Shaun Cedric Thomas" class="author-portrait" />
+        <div class="author-info">
+          <div class="name">Shaun Cedric Thomas</div>
+          <div class="role">Director, Partner Marketing · GetSmarter, a 2U brand</div>
+        </div>
+      </div>
+      <a href="../../#thoughts" class="back-link">← Back to Writing</a>
+    </footer>
+
+  </article>
+</main>
+
+<footer>
+  <div class="mono">© 2026 Shaun Cedric Thomas</div>
+  <div class="signature mono">· 8888 ·</div>
+  <div class="mono">Cape Town · South Africa</div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
