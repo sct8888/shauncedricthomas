@@ -1,1 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0E1116" />
+  <title>Halfway to 2,026 · Shaun Cedric Thomas</title>
+  <meta name="description" content="A mid-year report on running 2,026 kilometres in 2026. 1,048 done, 978 still to go. A first ultra, chairing the Marketing Advisory Committee, and the quiet work of showing up." />
+  <link rel="canonical" href="https://shauncedricthomas.com/writing/halfway-to-2026/" />
 
+  <meta property="og:title" content="Halfway to 2,026 · Shaun Cedric Thomas" />
+  <meta property="og:description" content="A mid-year report on running 2,026 kilometres in 2026. 1,048 done, 978 still to go." />
+  <meta property="og:url" content="https://shauncedricthomas.com/writing/halfway-to-2026/" />
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-07-30" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --ink: #0E1116;
+      --paper: #F4EFE6;
+      --acid: #D4FF3D;
+      --amber: #E8722C;
+      --line: rgba(244,239,230,0.12);
+      color-scheme: dark;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: #0E1116; }
+    body {
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'Fraunces', Georgia, serif;
+      font-weight: 350;
+      font-size: 17px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 24px 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      backdrop-filter: blur(12px);
+      background: rgba(14,17,22,0.7);
+      border-bottom: 1px solid var(--line);
+    }
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; letter-spacing: 0.06em;
+      color: var(--paper); text-decoration: none;
+    }
+    .logo span { color: var(--acid); }
+    .logo small { font-size: 10px; opacity: 0.5; margin-left: 2px; }
+    .nav-back {
+      color: var(--paper); text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      opacity: 0.6; transition: opacity 0.3s ease;
+    }
+    .nav-back:hover { opacity: 1; color: var(--acid); }
+
+    .article-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 160px 48px 120px;
+    }
+    .article-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(244,239,230,0.5);
+      margin-bottom: 32px;
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .article-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 300;
+      font-size: clamp(36px, 5.5vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+    .article-lede {
+      font-size: 22px;
+      line-height: 1.45;
+      color: rgba(244,239,230,0.75);
+      margin-bottom: 64px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--line);
+    }
+    .article-body h2 {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+      margin: 56px 0 20px;
+      line-height: 1.2;
+    }
+    .article-body p {
+      font-size: 19px;
+      line-height: 1.65;
+      color: rgba(244,239,230,0.85);
+      margin-bottom: 24px;
+      max-width: 680px;
+    }
+    .article-body p:first-of-type::first-letter {
+      font-size: 72px;
+      float: left;
+      line-height: 0.85;
+      margin: 8px 14px 0 0;
+      color: var(--acid);
+      font-weight: 400;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 14px 24px;
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      color: var(--paper);
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+      transition: all 0.3s ease;
+      margin-top: 64px;
+    }
+    .back-link:hover {
+      background: var(--acid);
+      color: var(--ink);
+      border-color: var(--acid);
+    }
+    @media (max-width: 700px) {
+      nav { padding: 18px 24px; }
+      .article-wrap { padding: 120px 24px 80px; }
+      .article-title { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">SCT<span>.</span><small>8888</small></a>
+    <a href="../" class="nav-back">← Writing</a>
+  </nav>
+
+  <article class="article-wrap">
+    <div class="article-meta">
+      <span>Running</span>
+      <span>·</span>
+      <time datetime="2026-07-30">30 July 2026</time>
+      <span>·</span>
+      <span>6 min read</span>
+    </div>
+
+    <h1 class="article-title">Halfway to 2,026</h1>
+
+    <p class="article-lede">A mid-year report on running 2,026 kilometres in 2026. 1,048 done. 978 still to go. A first ultra, chairing the Marketing Advisory Committee, and the quiet work of showing up.</p>
+
+    <div class="article-body">
+      <p>I decided before the year began that 2026 would be measured in kilometres. Exactly 2,026 of them. A running goal that matched the calendar felt clean at the time. Now, just past the midpoint with 1,048 kilometres already done, the number has settled into something more honest. There are 978 left, and the second half will ask more of me than the first.</p>
+
+      <p>The psychology of a goal like this is straightforward at the start and more revealing as the months pass. You choose a number large enough to matter so that ordinary runs stop feeling ordinary. Every kilometre becomes a small, quiet payment. At the same time the total never lets you pretend you are further along than you are. 1,048 is respectable work. It is also incomplete. That gap is useful. It keeps the year honest.</p>
+
+      <p>The clearest test of that honesty arrived on the Sea Point Promenade in July. Ten loops. Fifty kilometres. My first ultra, run in the simplest possible way: the same path, the same sea wall, the same shifting light, repeated until the body stopped negotiating and simply continued. Loop courses leave nowhere to hide. When the scenery refuses to change, the mind has to. I finished in 5:37, a personal best that still feels slightly surprising, but the lasting impression was not the time. It was the decision to keep turning at the same point, ten times, without needing the landscape to become more interesting.</p>
+
+      <p>The rest of the first half carried a similar quality of steady distance.</p>
+
+      <p>At work the kilometres are less visible. My full-time role as Director of Partner Marketing sits mostly inside systems and long relationships: the careful translation of strategy into something a partner institution can trust, the quiet architecture that lets programmes succeed without collapsing under their own weight. The work is rarely dramatic. It is high-stakes continuity. You learn to hold complexity without needing to announce it.</p>
+
+      <p>Alongside that, the part-time work has carried its own weight. Chairing the Marketing Advisory Committee at CPUT for the first time changed the texture of the responsibility. You move from preparing lectures and marking scripts to shaping the conversation between industry, academia and the students who will inherit both. It is not flashy work. It is the work of keeping the discussion honest and useful. Lecturing into a third year has carried its own slow shift. The content is familiar; the students are not. The real teaching happens in the space between what you already know and what they are ready to take as their own.</p>
+
+      <p>None of this happens in isolation.</p>
+
+      <p>I am grateful for family who have remained steady while the year has asked for more of my attention and energy. Grateful for the friendships that have not required constant maintenance to stay true, the people who simply continued being themselves. Some relationships have thinned the way adult relationships often do when life pulls in different directions. Others ended more sharply. Earlier this year I spoke at the memorial of a close friend and running mentor who is no longer here. Mark understood the language of kilometres better than most. He would have looked at the 2,026 goal and asked the only question that still matters: are you still finding something worth loving in the plain act of showing up? I do not have a complete answer, but I keep running partly because he once made the question feel worth asking.</p>
+
+      <p>The challenges have been real enough. Balancing the intensity of full-time director-level work with part-time lecturing and committee leadership. Managing the physical and mental load of building toward an ultra while still covering the ordinary weekly kilometres. Sitting with absence. Learning, again, that progress is rarely linear and almost never loud.</p>
+
+      <p>The Renegade crew has been a constant through all of it. Early mornings, shared fatigue, the particular humour that only appears after the third hour. They do not replace what was lost, but they prove that new forms of belonging can still take root while you are busy covering the ground.</p>
+
+      <p>So this is the halfway report. 1,048 kilometres done. 978 still to run. A first ultra completed on familiar concrete. A first time chairing the advisory committee. A third year in the lecture room. Family that stayed. Friendships that held. One important friendship that ended. The work of showing up in systems larger than myself and in rooms where the next generation is listening.</p>
+
+      <p>The number is no longer neat. It is simply the distance left between the person who started in January and the person who will, I hope, still be moving in December. One deliberate step at a time.</p>
+    </div>
+
+    <a href="../" class="back-link">← Back to Writing</a>
+  </article>
+</body>
+</html>
