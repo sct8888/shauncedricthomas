@@ -40,6 +40,11 @@
     <loc>https://shauncedricthomas.com/writing/tarot-and-digital-marketing/</loc>
     <lastmod>2026-05-05</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.8</priority>  <url>
+    <loc>https://shauncedricthomas.com/writing/</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
   </url>
 </urlset>
