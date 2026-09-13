@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shaun Cedric Thomas</title>
+<script>
+(function () {
+  var url = 'https://raw.githubusercontent.com/sct8888/shauncedricthomas/f5dcca3f5c7b820e5022caa0e5495d2b525bc39a/index.html';
+  fetch(url, { cache: 'no-store' })
+    .then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.text(); })
+    .then(function (html) {
+      document.open();
+      document.write(html);
+      document.close();
+    })
+    .catch(function () {
+      document.body.innerHTML = '<main style="font-family:system-ui;max-width:40rem;margin:4rem auto;padding:0 1.5rem;line-height:1.5"><h1>Restoring</h1><p>The homepage is being restored. Refresh in a minute.</p></main>';
+    });
+})();
+</script>
+</head>
+<body>
+<p style="font-family:system-ui;margin:2rem">Loading…</p>
+</body>
+</html>
