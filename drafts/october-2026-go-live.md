@@ -1,4 +1,4 @@
-# October 2026 go-live — After the banners come down
+# October 2026 go-live: After the banners come down
 
 Do this on or after 1 October 2026. Not before. Copy below is locked with Shaun.
 
@@ -33,9 +33,9 @@ In root `index.html` Notes section (`#notes`):
 - Change label from `Updated September 2026` to `Updated October 2026`
 - Replace the notes paragraph(s) with exactly:
 
-After the banners come down, attention moves. It always does. This September brought memorial runs, vigils, and men in the street after women in Ekurhuleni did not come home. I was glad people showed up. I am also left with the same question 2020 left me with: what happens when the month turns and the country finds something else to care about?
+After the banners come down, attention moves. It always does. Last month brought memorial runs, vigils and men in the street after women in Ekurhuleni did not come home. I was glad people showed up. I am also left with the same question 2020 left me with: what happens when the month turns and the country finds something else to care about?
 
-Gender-based violence here is not a short spike. It is an ongoing condition. Race can work the same way in rooms that think the hard work is already done. A quiet week is not proof that everyone is having the same experience. Some things stay true after the post stops circulating.
+Gender-based violence here is not a short spike. It is an ongoing condition. Race can work the same way in rooms that think the hard work is already done, where bias that nobody means is also bias that nobody sees. A quiet week is not proof that everyone is having the same experience. Some things stay true after the post stops circulating.
 
 What I am asking of myself for October is smaller and harder than a banner. Stay with it after the banner comes down.
 
@@ -51,9 +51,9 @@ I keep watching the same pattern.
 
 In 2020, the world found language for something that had been true for a long time. People marched. Workplaces spoke up. Then attention moved on, not because the facts changed, but because attention always does.
 
-This September I saw a version of that closer to home. Memorial runs. Vigils. Men in the street after women in Ekurhuleni did not come home. I was glad people showed up. I am also left with the quieter question: what happens when the funerals are over and the country finds something else to care about?
+Last month I saw a version of that much closer to home, with memorial runs, vigils and men in the street after women in Ekurhuleni did not come home. I was glad people showed up. I am also left with the quieter question: what happens when the funerals are over and the country finds something else to care about?
 
-Gender-based violence here is not a short spike. It is an ongoing condition. Race can work the same way in rooms that think the hard work is already done. A quiet week is not proof that everyone is having the same month.
+Gender-based violence here is not a short spike. It is an ongoing condition. Race can work the same way in rooms that think the hard work is already done. Most of it is not malicious, and the people doing it genuinely do not see it, which is why a quiet week is not proof that everyone is having the same month.
 
 I wrote about what I am asking of myself for October: stay with it after the banners come down.
 
