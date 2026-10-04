@@ -129,16 +129,24 @@
   .brand-link-logo { display: flex; align-items: center; border-radius: 4px; text-decoration: none; }
   .brand-link-logo:focus-visible { outline: 1px solid var(--acid); outline-offset: 6px; }
   .brand-link-logo:focus-visible .brand-logo, .marquee-list li:focus-within .brand-logo { opacity: 1; }
-  .brand-logo { height: 40px; width: auto; display: block; opacity: 0.55; transition: opacity 0.3s ease; }
+  .brand-logo { height: 40px; width: auto; display: block; opacity: 0.55; transition: opacity 0.3s ease, filter 0.3s ease; }
   .brand-logo.h-sm { height: 32px; }
   .brand-logo.h-md { height: 36px; }
   .brand-logo.h-lg { height: 48px; }
-  .brand-logo.mono-svg { filter: brightness(0) invert(1); }
-  .brand-logo.logo-round { height: 77px; width: 77px; border-radius: 50%; border: 1px solid var(--line); opacity: 0.7; filter: grayscale(0.35); transition: opacity 0.3s ease, filter 0.3s ease; }
-  .marquee-list li:focus-within .brand-logo.logo-round { filter: none; }
+  /* Every logo file is the true-colour brand logo. The default state flattens it to the same muted off-white (at 0.55 opacity); hover or keyboard focus restores the real colours. */
+  .brand-logo.mono-svg, .brand-logo.tone-sil { filter: brightness(0) invert(1); } /* single-colour marks become a flat white silhouette */
+  .brand-logo.tone-flip { filter: grayscale(1) invert(1) brightness(1.55); } /* marks with light and dark parts keep their detail, flipped to light on dark */
+  .brand-logo.tone-grey { filter: grayscale(1) brightness(3); } /* red and white mark becomes off-white */
+  .brand-logo.logo-round { height: 77px; width: 77px; border-radius: 50%; border: 1px solid var(--line); opacity: 0.7; filter: grayscale(1) brightness(2); }
+  /* Brands whose real colours are dark or mid-tone get a soft light plate on hover so they still read on the dark page. It sits behind the logo and takes no layout space. */
+  .brand-link-logo { position: relative; }
+  .brand-link-logo .brand-logo { position: relative; z-index: 1; }
+  .brand-link-logo.logo-plate::before { content: ''; position: absolute; inset: -10px -14px; border-radius: 8px; background: #F4EFE6; opacity: 0; transition: opacity 0.3s ease; }
+  .brand-link-logo:focus-visible .brand-logo, .marquee-list li:focus-within .brand-logo { filter: none; }
+  .brand-link-logo.logo-plate:focus-visible::before { opacity: 1; }
   @media (hover: hover) {
-    .marquee-list li:hover .brand-logo { opacity: 1; }
-    .marquee-list li:hover .brand-logo.logo-round { filter: none; }
+    .marquee-list li:hover .brand-logo { opacity: 1; filter: none; }
+    .marquee-list li:hover .logo-plate::before { opacity: 1; }
   }
 
   .testimonial { flex: 0 0 calc((100% - 40px) / 3); scroll-snap-align: start; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: 32px 28px 28px; border: 1px solid var(--line); background: #15191F; position: relative; transition: transform 0.4s ease, border-color 0.4s ease; }
