@@ -111,10 +111,12 @@
   .brands { max-width: 100%; padding: 56px 0 72px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #15191F 0%, var(--ink) 100%); }
   .brands-inner { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
   .brands-label { color: var(--amber); margin-bottom: 28px; }
-  .marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%); }
-  .marquee-track { display: flex; width: max-content; animation: marquee 40s linear infinite; }
-  .marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
-  .marquee-list { display: flex; align-items: center; justify-content: space-around; flex-shrink: 0; min-width: 100vw; gap: 72px; padding-right: 72px; list-style: none; }
+  .marquee { overflow-x: auto; overflow-y: hidden; scrollbar-width: none; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; cursor: grab; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%); }
+  .marquee::-webkit-scrollbar { display: none; }
+  .marquee.dragging { cursor: grabbing; user-select: none; }
+  .marquee-track { display: flex; width: max-content; }
+  .marquee a, .marquee img { -webkit-user-drag: none; user-select: none; -webkit-touch-callout: none; }
+  .marquee-list { display: flex; align-items: center; justify-content: space-around; flex-shrink: 0; min-width: calc(100vw + 60px); gap: 72px; padding-right: 72px; list-style: none; }
   .marquee-list li { display: flex; align-items: center; height: 80px; }
   .brand-link-logo { display: flex; align-items: center; border-radius: 4px; text-decoration: none; }
   .brand-link-logo:focus-visible { outline: 1px solid var(--acid); outline-offset: 6px; }
@@ -125,9 +127,11 @@
   .brand-logo.h-lg { height: 48px; }
   .brand-logo.mono-svg { filter: brightness(0) invert(1); }
   .brand-logo.logo-round { height: 77px; width: 77px; border-radius: 50%; border: 1px solid var(--line); opacity: 0.7; filter: grayscale(0.35); transition: opacity 0.3s ease, filter 0.3s ease; }
-  .marquee-list li:hover .brand-logo { opacity: 1; }
-  .marquee-list li:hover .brand-logo.logo-round, .marquee-list li:focus-within .brand-logo.logo-round { filter: none; }
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-list li:focus-within .brand-logo.logo-round { filter: none; }
+  @media (hover: hover) {
+    .marquee-list li:hover .brand-logo { opacity: 1; }
+    .marquee-list li:hover .brand-logo.logo-round { filter: none; }
+  }
 
   .testimonial { flex: 0 0 calc((100% - 40px) / 3); scroll-snap-align: start; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: 32px 28px 28px; border: 1px solid var(--line); background: #15191F; position: relative; transition: transform 0.4s ease, border-color 0.4s ease; }
   .testimonial:hover { transform: translateY(-4px); border-color: var(--acid); }
@@ -160,10 +164,16 @@
     .testimonial { flex-basis: 86%; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .marquee { -webkit-mask-image: none; mask-image: none; }
-    .marquee-track { animation: none; width: auto; justify-content: center; padding: 0 24px; }
-    .marquee-list { flex-wrap: wrap; justify-content: center; min-width: 0; gap: 24px 48px; padding-right: 0; }
+    /* Reduced motion: no auto-scroll. Still a swipeable single row on phones, wrapped row on wide screens. */
+    .marquee-track { width: max-content; }
+    .marquee-list { min-width: 0; justify-content: flex-start; }
     .marquee-list[aria-hidden="true"] { display: none; }
+    .marquee { cursor: auto; }
+    @media (min-width: 881px) {
+      .marquee { -webkit-mask-image: none; mask-image: none; overflow-x: visible; }
+      .marquee-track { width: auto; justify-content: center; padding: 0 24px; }
+      .marquee-list { flex-wrap: wrap; justify-content: center; gap: 24px 48px; padding-right: 0; }
+    }
     .carousel-track { scroll-behavior: auto; }
     .testimonial, .brand-logo, .carousel-progress span { transition: none; }
     .testimonial:hover { transform: none; }

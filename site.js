@@ -79,3 +79,81 @@ const observer = new IntersectionObserver((entries) => {
     });
     update();
   })();
+
+  /* Logo marquee: slow JS auto-scroll that can also be swiped or dragged */
+  (function () {
+    const box = document.querySelector('.marquee');
+    if (!box) return;
+    const lists = box.querySelectorAll('.marquee-list');
+    if (lists.length < 2) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const SPEED = 28;       // px per second
+    const RESUME = 2500;    // ms to wait after the visitor stops touching or dragging
+    const OFFSET = 20;      // loop window is [OFFSET, OFFSET + listWidth) so we can scroll both ways
+    let pos = 0, lastSet = 0, last = 0, holdUntil = 0, hovering = false, focused = false, down = false, visible = true, raf = 0;
+    const width = () => lists[1].offsetLeft - lists[0].offsetLeft;
+    const hold = (ms) => { holdUntil = Math.max(holdUntil, performance.now() + ms); };
+    function wrap() {
+      const w = width();
+      if (w <= box.clientWidth) return;
+      let p = box.scrollLeft, moved = false;
+      if (p >= OFFSET + w) { p -= w; moved = true; }
+      else if (p < OFFSET) { p += w; moved = true; }
+      if (moved) { box.scrollLeft = p; pos = lastSet = p; }
+    }
+    function tick(t) {
+      raf = window.requestAnimationFrame(tick);
+      const dt = Math.min(64, t - last); last = t;
+      if (reduce.matches || !visible || hovering || focused || down || t < holdUntil) return;
+      pos += SPEED * dt / 1000;
+      lastSet = pos;
+      box.scrollLeft = pos;
+      wrap();
+    }
+    function start() {
+      if (raf || reduce.matches) return;
+      last = performance.now();
+      if (box.scrollLeft < OFFSET) box.scrollLeft = OFFSET;
+      pos = lastSet = box.scrollLeft;
+      raf = window.requestAnimationFrame(tick);
+    }
+    function stop() { window.cancelAnimationFrame(raf); raf = 0; }
+    reduce.addEventListener('change', () => { if (reduce.matches) { stop(); box.scrollLeft = 0; } else start(); });
+    /* any scroll we did not cause (touch swipe, momentum, trackpad, drag) pauses auto-scroll and re-syncs */
+    box.addEventListener('scroll', () => {
+      if (Math.abs(box.scrollLeft - lastSet) > 2) { hold(RESUME); pos = lastSet = box.scrollLeft; }
+      if (!reduce.matches) wrap();
+    }, { passive: true });
+    box.addEventListener('touchstart', () => { down = true; }, { passive: true });
+    const touchEnd = () => { down = false; hold(RESUME); };
+    box.addEventListener('touchend', touchEnd, { passive: true });
+    box.addEventListener('touchcancel', touchEnd, { passive: true });
+    box.addEventListener('wheel', () => hold(RESUME), { passive: true });
+    box.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hovering = true; });
+    box.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') { hovering = false; hold(600); } });
+    box.addEventListener('focusin', (e) => { if (e.target.matches && e.target.matches(':focus-visible')) focused = true; });
+    box.addEventListener('focusout', () => { focused = false; });
+    /* mouse drag; a drag must never count as a click on a logo */
+    let startX = 0, startLeft = 0, moved = false;
+    box.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      down = true; moved = false; startX = e.clientX; startLeft = box.scrollLeft;
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!down || e.pointerType !== 'mouse') return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 5) { moved = true; box.classList.add('dragging'); }
+      if (moved) { box.scrollLeft = startLeft - dx; }
+    });
+    window.addEventListener('pointerup', (e) => {
+      if (e.pointerType !== 'mouse' || !down) return;
+      down = false; hold(RESUME); box.classList.remove('dragging');
+      pos = lastSet = box.scrollLeft;
+    });
+    box.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    box.querySelectorAll('a, img').forEach((el) => el.setAttribute('draggable', 'false'));
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => { visible = entries[0].isIntersecting; }, { threshold: 0 }).observe(box);
+    }
+    start();
+  })();
