@@ -80,28 +80,27 @@ const observer = new IntersectionObserver((entries) => {
     update();
   })();
 
-  /* Logo marquee: endless loop. Slow JS auto-scroll that can also be swiped or dragged. */
+  /* Logo marquee: CSS transform loop (one set width) plus swipe/drag by hand.
+     The loop itself never depends on JS state: any pause from touch or drag ends on a timer. */
   (function () {
     const box = document.querySelector('.marquee');
     if (!box) return;
+    const pan = box.querySelector('.marquee-pan');
     const track = box.querySelector('.marquee-track');
     const first = box.querySelector('.marquee-list');
-    if (!track || !first) return;
+    const toggle = document.getElementById('marquee-toggle');
+    if (!pan || !track || !first) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const SPEED = 28;       // px per second
-    const RESUME = 2500;    // ms to wait after the visitor stops touching or dragging
-    let copies = 0, setW = 0;
-    let pos = 0, lastSet = 0, last = 0, holdUntil = 0, hovering = false, focused = false, down = false, visible = true, raf = 0;
-    const lists = () => box.querySelectorAll('.marquee-list');
-    const hold = (ms) => { holdUntil = Math.max(holdUntil, performance.now() + ms); };
+    const SPEED = 28, SPEED_REDUCED = 12;   // px per second
+    const IDLE = 1500;                       // ms after the visitor lets go before the loop resumes
+    const lists = () => track.querySelectorAll('.marquee-list');
+    let setW = 0, panX = 0, holding = false, dragging = false, releaseAt = 0, lastMove = 0, userPaused = false;
+    let startX = 0, startPan = 0, moved = false, vel = 0, lastX = 0, lastT = 0, momentum = 0;
 
-    /* Build as many identical, hidden copies of the logo set as needed so there are always
-       at least one full set of logos behind and ahead of the visible window. */
-    function measure() { const l = lists(); return l.length > 1 ? l[1].offsetLeft - l[0].offsetLeft : first.offsetWidth; }
-    function buildCopies() {
+    function layout() {
       const w = first.offsetWidth;
       if (!w) return;
-      const need = Math.max(4, Math.ceil(2.5 + box.clientWidth / w));
+      const need = Math.ceil(box.clientWidth / w) + 3;   // loop shift + pan shift + viewport, all covered
       while (lists().length < need) {
         const c = first.cloneNode(true);
         c.setAttribute('aria-hidden', 'true');
@@ -109,84 +108,92 @@ const observer = new IntersectionObserver((entries) => {
         c.querySelectorAll('img').forEach((img) => { img.alt = ''; });
         track.appendChild(c);
       }
-      copies = lists().length;
-      setW = measure();
-    }
-    /* Always keep scrollLeft inside the middle band [setW, 2 * setW). One set is identical to the next,
-       so moving by exactly one set width is invisible. */
-    function wrap() {
-      if (!setW) return;
-      let p = box.scrollLeft, moved = false;
-      while (p >= 2 * setW) { p -= setW; moved = true; }
-      while (p < setW) { p += setW; moved = true; }
-      if (moved) { box.scrollLeft = p; pos = lastSet = p; }
-    }
-    function tick(t) {
-      raf = window.requestAnimationFrame(tick);
-      const dt = Math.min(64, t - last); last = t;
-      if (reduce.matches || !visible || hovering || focused || down || t < holdUntil) return;
-      pos += SPEED * dt / 1000;
-      lastSet = pos;
-      box.scrollLeft = pos;
-      wrap();
-    }
-    function start() {
-      if (reduce.matches) return;
-      buildCopies();
-      if (!setW) return;
-      const frac = (box.scrollLeft % setW + setW) % setW;
-      box.scrollLeft = setW + frac;
-      pos = lastSet = box.scrollLeft;
-      if (!raf) { last = performance.now(); raf = window.requestAnimationFrame(tick); }
-    }
-    function stop() { window.cancelAnimationFrame(raf); raf = 0; }
-    reduce.addEventListener('change', () => { if (reduce.matches) { stop(); box.scrollLeft = 0; } else start(); });
-    let rt = 0;
-    window.addEventListener('resize', () => { window.clearTimeout(rt); rt = window.setTimeout(() => { if (!reduce.matches) start(); }, 150); });
-    window.addEventListener('load', () => { if (!reduce.matches) start(); });
-
-    /* any scroll we did not cause (touch swipe, momentum, trackpad, drag) pauses auto-scroll and re-syncs */
-    box.addEventListener('scroll', () => {
-      if (Math.abs(box.scrollLeft - lastSet) > 2) { hold(RESUME); pos = lastSet = box.scrollLeft; }
-      if (!reduce.matches) wrap();
-    }, { passive: true });
-    box.addEventListener('touchstart', () => { down = true; }, { passive: true });
-    const touchEnd = () => { down = false; hold(RESUME); };
-    box.addEventListener('touchend', touchEnd, { passive: true });
-    box.addEventListener('touchcancel', touchEnd, { passive: true });
-    box.addEventListener('wheel', () => hold(RESUME), { passive: true });
-    box.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') hovering = true; });
-    box.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') { hovering = false; hold(600); } });
-    box.addEventListener('focusin', (e) => { if (e.target.matches && e.target.matches(':focus-visible')) focused = true; });
-    box.addEventListener('focusout', () => { focused = false; });
-    /* mouse drag; a drag must never count as a click on a logo */
-    let startX = 0, startLeft = 0, moved = false;
-    box.addEventListener('pointerdown', (e) => {
-      if (e.pointerType !== 'mouse' || e.button !== 0) return;
-      down = true; moved = false; startX = e.clientX; startLeft = box.scrollLeft;
-    });
-    window.addEventListener('pointermove', (e) => {
-      if (!down || e.pointerType !== 'mouse') return;
-      const dx = e.clientX - startX;
-      if (!moved && Math.abs(dx) > 5) { moved = true; box.classList.add('dragging'); }
-      if (moved) {
-        box.scrollLeft = startLeft - dx;
-        if (!reduce.matches && setW) { /* keep the drag origin consistent when the loop wraps */
-          const p = box.scrollLeft; wrap();
-          if (box.scrollLeft !== p) startLeft += box.scrollLeft - p;
-        }
+      if (Math.abs(w - setW) > 0.5) {
+        setW = w;
+        box.style.setProperty('--marquee-shift', (-setW) + 'px');
+        box.style.setProperty('--marquee-dur', (setW / (reduce.matches ? SPEED_REDUCED : SPEED)).toFixed(2) + 's');
+        track.style.animation = 'none'; void track.offsetWidth; track.style.animation = '';  // restart with the new length
+        setPan(panX);
       }
-    });
-    window.addEventListener('pointerup', (e) => {
-      if (e.pointerType !== 'mouse' || !down) return;
-      down = false; hold(RESUME); box.classList.remove('dragging');
-      pos = lastSet = box.scrollLeft;
-    });
+    }
+    function setPan(x) {
+      if (setW) { x = x % setW; if (x > 0) x -= setW; }
+      panX = x;
+      pan.style.transform = 'translate3d(' + panX + 'px,0,0)';
+    }
+    function hold() { holding = true; box.classList.add('is-held'); }
+    function release() { holding = false; box.classList.remove('is-held'); }
+    function releaseSoon() { releaseAt = Date.now() + IDLE; }
+
+    /* Safety net: whatever happened (lost touchend, missed event), the loop always resumes. */
+    window.setInterval(() => {
+      if (holding && !dragging && Date.now() >= releaseAt) release();
+      if (dragging && Date.now() - lastMove > 4000) { dragging = false; box.classList.remove('dragging'); releaseSoon(); }
+    }, 300);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) { dragging = false; box.classList.remove('dragging'); release(); } });
+    window.addEventListener('blur', () => { dragging = false; box.classList.remove('dragging'); releaseSoon(); });
+
+    function down(e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      window.cancelAnimationFrame(momentum);
+      dragging = true; moved = false; startX = lastX = e.clientX; startPan = panX; vel = 0; lastT = performance.now(); lastMove = Date.now();
+    }
+    function move(e) {
+      if (!dragging) return;
+      lastMove = Date.now();
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 5) { moved = true; hold(); box.classList.add('dragging'); }
+      if (!moved) return;
+      const now = performance.now();
+      if (now > lastT) vel = 0.8 * vel + 0.2 * ((e.clientX - lastX) / (now - lastT));
+      lastX = e.clientX; lastT = now;
+      setPan(startPan + dx);
+    }
+    function up() {
+      if (!dragging) return;
+      dragging = false; box.classList.remove('dragging');
+      if (!moved) return;
+      releaseSoon();
+      let v = vel * 16;   // px per frame
+      if (Math.abs(v) < 1) return;
+      (function glide() {
+        v *= 0.94;
+        setPan(panX + v);
+        if (Math.abs(v) > 0.3) { momentum = window.requestAnimationFrame(glide); releaseSoon(); }
+      })();
+    }
+    box.addEventListener('pointerdown', down);
+    window.addEventListener('pointermove', move, { passive: true });
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    /* a drag must never count as a click on a logo */
     box.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
     box.addEventListener('dragstart', (e) => e.preventDefault());
     box.querySelectorAll('a, img').forEach((el) => el.setAttribute('draggable', 'false'));
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver((entries) => { visible = entries[0].isIntersecting; }, { threshold: 0 }).observe(box);
+    /* trackpad / wheel sideways */
+    box.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault(); hold(); setPan(panX - e.deltaX); releaseSoon();
+    }, { passive: false });
+    /* keyboard focus: bring the focused logo into view (the box does not scroll natively) */
+    box.addEventListener('focusin', (e) => {
+      box.scrollLeft = 0;
+      const a = e.target.closest && e.target.closest('a'); if (!a) return;
+      const r = a.getBoundingClientRect(), b = box.getBoundingClientRect();
+      if (r.left < b.left + 40 || r.right > b.right - 40) setPan(panX + (b.left + 60 - r.left));
+    });
+    /* Pause / Play button */
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        userPaused = !userPaused;
+        box.classList.toggle('is-paused', userPaused);
+        toggle.textContent = userPaused ? 'Play' : 'Pause';
+        toggle.setAttribute('aria-pressed', String(userPaused));
+        toggle.setAttribute('aria-label', userPaused ? 'Resume logo scrolling' : 'Pause logo scrolling');
+      });
     }
-    start();
+    reduce.addEventListener('change', () => { setW = 0; layout(); });
+    window.addEventListener('resize', () => { window.clearTimeout(layout.t); layout.t = window.setTimeout(layout, 120); });
+    window.addEventListener('load', layout);
+    layout();
   })();

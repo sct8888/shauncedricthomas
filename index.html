@@ -78,9 +78,13 @@
 <main>
 <section class="brands" id="brands" aria-labelledby="brands-label">
   <div class="brands-inner">
-    <p class="mono brands-label" id="brands-label">Brands and organisations I've worked with</p>
+    <div class="brands-head">
+      <p class="mono brands-label" id="brands-label">Brands and organisations I've worked with</p>
+      <button type="button" class="marquee-toggle" id="marquee-toggle" aria-pressed="false" aria-label="Pause logo scrolling">Pause</button>
+    </div>
   </div>
   <div class="marquee">
+    <div class="marquee-pan">
     <div class="marquee-track">
     <ul class="marquee-list">
       <li><a class="brand-link-logo" href="https://www.unilever.com" target="_blank" rel="noopener noreferrer" aria-label="Unilever (opens in a new tab)"><img class="brand-logo mono-svg h-lg" src="images/logos/unilever.svg" alt="Unilever" width="121" height="132" decoding="async" /></a></li>
@@ -100,6 +104,7 @@
       <li><a class="brand-link-logo" href="https://2u.com" target="_blank" rel="noopener noreferrer" tabindex="-1"><img class="brand-logo h-sm" src="images/logos/2u.png" alt="" width="300" height="300" decoding="async" /></a></li>
       <li><a class="brand-link-logo" href="https://www.getsmarter.com" target="_blank" rel="noopener noreferrer" tabindex="-1"><img class="brand-logo mono-svg h-sm" src="images/logos/getsmarter.svg" alt="" width="183" height="41" decoding="async" /></a></li>
     </ul>
+    </div>
     </div>
   </div>
   <div class="brands-inner">
