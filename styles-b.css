@@ -139,15 +139,13 @@
   .brand-logo.tone-lift { filter: grayscale(1) brightness(1.7); } /* transparent logos whose dark parts are already lifted to a light tint: keep the detail, flatten to muted light grey */
   .brand-logo.tone-grey { filter: grayscale(1) brightness(3); } /* red and white mark becomes off-white */
   .brand-logo.logo-round { height: 77px; width: 77px; border-radius: 50%; border: 1px solid var(--line); opacity: 0.7; filter: grayscale(1) brightness(2); }
-  /* Brands whose real colours are dark or mid-tone get a soft light plate on hover so they still read on the dark page. It sits behind the logo and takes no layout space. */
-  .brand-link-logo { position: relative; }
-  .brand-link-logo .brand-logo { position: relative; z-index: 1; }
-  .brand-link-logo.logo-plate::before { content: ''; position: absolute; inset: -10px -14px; border-radius: 8px; background: #F4EFE6; opacity: 0; transition: opacity 0.3s ease; }
   .brand-link-logo:focus-visible .brand-logo, .marquee-list li:focus-within .brand-logo { filter: none; }
-  .brand-link-logo.logo-plate:focus-visible::before { opacity: 1; }
+  /* Unilever: the real logo is a single dark blue (#1F36C7) that would vanish on the dark page, so on hover it is lifted to a lighter tint of the same blue (no plate). */
+  .brand-logo.hover-lift { filter: brightness(0) invert(1); }
+  .brand-link-logo:focus-visible .brand-logo.hover-lift, .marquee-list li:focus-within .brand-logo.hover-lift { filter: brightness(2.3) invert(0); }
   @media (hover: hover) {
     .marquee-list li:hover .brand-logo { opacity: 1; filter: none; }
-    .marquee-list li:hover .logo-plate::before { opacity: 1; }
+    .marquee-list li:hover .brand-logo.hover-lift { filter: brightness(2.3) invert(0); }
   }
 
   .testimonial { flex: 0 0 calc((100% - 40px) / 3); scroll-snap-align: start; display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding: 32px 28px 28px; border: 1px solid var(--line); background: #15191F; position: relative; transition: transform 0.4s ease, border-color 0.4s ease; }
