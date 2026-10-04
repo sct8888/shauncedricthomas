@@ -116,7 +116,7 @@
   .marquee.dragging { cursor: grabbing; user-select: none; }
   .marquee-track { display: flex; width: max-content; }
   .marquee a, .marquee img { -webkit-user-drag: none; user-select: none; -webkit-touch-callout: none; }
-  .marquee-list { display: flex; align-items: center; justify-content: space-around; flex-shrink: 0; min-width: calc(100vw + 60px); gap: 72px; padding-right: 72px; list-style: none; }
+  .marquee-list { display: flex; align-items: center; flex-shrink: 0; gap: 72px; padding-right: 72px; list-style: none; }
   .marquee-list li { display: flex; align-items: center; height: 80px; }
   .brand-link-logo { display: flex; align-items: center; border-radius: 4px; text-decoration: none; }
   .brand-link-logo:focus-visible { outline: 1px solid var(--acid); outline-offset: 6px; }

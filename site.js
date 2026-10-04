@@ -80,25 +80,45 @@ const observer = new IntersectionObserver((entries) => {
     update();
   })();
 
-  /* Logo marquee: slow JS auto-scroll that can also be swiped or dragged */
+  /* Logo marquee: endless loop. Slow JS auto-scroll that can also be swiped or dragged. */
   (function () {
     const box = document.querySelector('.marquee');
     if (!box) return;
-    const lists = box.querySelectorAll('.marquee-list');
-    if (lists.length < 2) return;
+    const track = box.querySelector('.marquee-track');
+    const first = box.querySelector('.marquee-list');
+    if (!track || !first) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     const SPEED = 28;       // px per second
     const RESUME = 2500;    // ms to wait after the visitor stops touching or dragging
-    const OFFSET = 20;      // loop window is [OFFSET, OFFSET + listWidth) so we can scroll both ways
+    let copies = 0, setW = 0;
     let pos = 0, lastSet = 0, last = 0, holdUntil = 0, hovering = false, focused = false, down = false, visible = true, raf = 0;
-    const width = () => lists[1].offsetLeft - lists[0].offsetLeft;
+    const lists = () => box.querySelectorAll('.marquee-list');
     const hold = (ms) => { holdUntil = Math.max(holdUntil, performance.now() + ms); };
+
+    /* Build as many identical, hidden copies of the logo set as needed so there are always
+       at least one full set of logos behind and ahead of the visible window. */
+    function measure() { const l = lists(); return l.length > 1 ? l[1].offsetLeft - l[0].offsetLeft : first.offsetWidth; }
+    function buildCopies() {
+      const w = first.offsetWidth;
+      if (!w) return;
+      const need = Math.max(4, Math.ceil(2.5 + box.clientWidth / w));
+      while (lists().length < need) {
+        const c = first.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        c.querySelectorAll('a').forEach((a) => { a.setAttribute('tabindex', '-1'); a.removeAttribute('aria-label'); });
+        c.querySelectorAll('img').forEach((img) => { img.alt = ''; });
+        track.appendChild(c);
+      }
+      copies = lists().length;
+      setW = measure();
+    }
+    /* Always keep scrollLeft inside the middle band [setW, 2 * setW). One set is identical to the next,
+       so moving by exactly one set width is invisible. */
     function wrap() {
-      const w = width();
-      if (w <= box.clientWidth) return;
+      if (!setW) return;
       let p = box.scrollLeft, moved = false;
-      if (p >= OFFSET + w) { p -= w; moved = true; }
-      else if (p < OFFSET) { p += w; moved = true; }
+      while (p >= 2 * setW) { p -= setW; moved = true; }
+      while (p < setW) { p += setW; moved = true; }
       if (moved) { box.scrollLeft = p; pos = lastSet = p; }
     }
     function tick(t) {
@@ -111,14 +131,20 @@ const observer = new IntersectionObserver((entries) => {
       wrap();
     }
     function start() {
-      if (raf || reduce.matches) return;
-      last = performance.now();
-      if (box.scrollLeft < OFFSET) box.scrollLeft = OFFSET;
+      if (reduce.matches) return;
+      buildCopies();
+      if (!setW) return;
+      const frac = (box.scrollLeft % setW + setW) % setW;
+      box.scrollLeft = setW + frac;
       pos = lastSet = box.scrollLeft;
-      raf = window.requestAnimationFrame(tick);
+      if (!raf) { last = performance.now(); raf = window.requestAnimationFrame(tick); }
     }
     function stop() { window.cancelAnimationFrame(raf); raf = 0; }
     reduce.addEventListener('change', () => { if (reduce.matches) { stop(); box.scrollLeft = 0; } else start(); });
+    let rt = 0;
+    window.addEventListener('resize', () => { window.clearTimeout(rt); rt = window.setTimeout(() => { if (!reduce.matches) start(); }, 150); });
+    window.addEventListener('load', () => { if (!reduce.matches) start(); });
+
     /* any scroll we did not cause (touch swipe, momentum, trackpad, drag) pauses auto-scroll and re-syncs */
     box.addEventListener('scroll', () => {
       if (Math.abs(box.scrollLeft - lastSet) > 2) { hold(RESUME); pos = lastSet = box.scrollLeft; }
@@ -143,7 +169,13 @@ const observer = new IntersectionObserver((entries) => {
       if (!down || e.pointerType !== 'mouse') return;
       const dx = e.clientX - startX;
       if (!moved && Math.abs(dx) > 5) { moved = true; box.classList.add('dragging'); }
-      if (moved) { box.scrollLeft = startLeft - dx; }
+      if (moved) {
+        box.scrollLeft = startLeft - dx;
+        if (!reduce.matches && setW) { /* keep the drag origin consistent when the loop wraps */
+          const p = box.scrollLeft; wrap();
+          if (box.scrollLeft !== p) startLeft += box.scrollLeft - p;
+        }
+      }
     });
     window.addEventListener('pointerup', (e) => {
       if (e.pointerType !== 'mouse' || !down) return;
@@ -151,6 +183,7 @@ const observer = new IntersectionObserver((entries) => {
       pos = lastSet = box.scrollLeft;
     });
     box.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    box.addEventListener('dragstart', (e) => e.preventDefault());
     box.querySelectorAll('a, img').forEach((el) => el.setAttribute('draggable', 'false'));
     if ('IntersectionObserver' in window) {
       new IntersectionObserver((entries) => { visible = entries[0].isIntersecting; }, { threshold: 0 }).observe(box);
