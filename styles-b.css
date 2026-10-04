@@ -136,6 +136,7 @@
   /* Every logo file is the true-colour brand logo. The default state flattens it to the same muted off-white (at 0.55 opacity); hover or keyboard focus restores the real colours. */
   .brand-logo.mono-svg, .brand-logo.tone-sil { filter: brightness(0) invert(1); } /* single-colour marks become a flat white silhouette */
   .brand-logo.tone-flip { filter: grayscale(1) invert(1) brightness(1.55); } /* marks with light and dark parts keep their detail, flipped to light on dark */
+  .brand-logo.tone-lift { filter: grayscale(1) brightness(1.7); } /* transparent logos whose dark parts are already lifted to a light tint: keep the detail, flatten to muted light grey */
   .brand-logo.tone-grey { filter: grayscale(1) brightness(3); } /* red and white mark becomes off-white */
   .brand-logo.logo-round { height: 77px; width: 77px; border-radius: 50%; border: 1px solid var(--line); opacity: 0.7; filter: grayscale(1) brightness(2); }
   /* Brands whose real colours are dark or mid-tone get a soft light plate on hover so they still read on the dark page. It sits behind the logo and takes no layout space. */
