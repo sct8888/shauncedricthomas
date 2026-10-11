@@ -37,7 +37,9 @@
   .speaking-content { display: flex; flex-direction: column; gap: 48px; }
   .speaking-lede { font-size: 22px; line-height: 1.45; max-width: 760px; color: rgba(244,239,230,0.85); }
   .speaking-lede strong { color: var(--paper); font-weight: 500; }
-  .speaking-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .speaking-photos { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; }
+  .speaking-photos > .speaking-photo { grid-column: span 3; }
+  .speaking-photos > .speaking-photo--panel { grid-column: span 2; }
   .speaking-photo { position: relative; border: 1px solid var(--line); padding: 10px; background: #15191F; transition: transform 0.4s ease, border-color 0.4s ease; }
   .speaking-photo:hover { transform: translateY(-4px); border-color: var(--acid); }
   .speaking-photo img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; filter: contrast(1.02) saturate(0.92); }
@@ -96,6 +98,7 @@
     .creds-block { grid-template-columns: 1fr; gap: 24px; }
     .projects-grid { grid-template-columns: 1fr; }
     .speaking-photos { grid-template-columns: 1fr; gap: 16px; }
+    .speaking-photos > .speaking-photo, .speaking-photos > .speaking-photo--panel { grid-column: auto; }
     .off-clock-photos { grid-template-columns: 1fr 1fr; gap: 12px; }
     .speaking-lede { font-size: 19px; }
     .thought { grid-template-columns: 1fr; gap: 12px; padding: 28px 0; }
