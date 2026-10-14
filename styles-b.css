@@ -37,7 +37,8 @@
   .speaking-content { display: flex; flex-direction: column; gap: 48px; }
   .speaking-lede { font-size: 22px; line-height: 1.45; max-width: 760px; color: rgba(244,239,230,0.85); }
   .speaking-lede strong { color: var(--paper); font-weight: 500; }
-  .off-clock-aside { margin-top: 28px; font-size: 16px; color: rgba(244,239,230,0.6); }
+  .off-clock-callout { display: inline-flex; align-items: center; gap: 12px; margin-top: 32px; padding: 14px 24px; border: 1px solid var(--line); border-radius: 100px; color: var(--paper); text-decoration: none; font-size: 11px; letter-spacing: 0.1em; transition: all 0.3s ease; }
+  .off-clock-callout:hover, .off-clock-callout:focus-visible { background: var(--acid); border-color: var(--acid); color: var(--ink); outline: none; }
   .speaking-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .speaking-photo { position: relative; border: 1px solid var(--line); padding: 10px; background: #15191F; transition: transform 0.4s ease, border-color 0.4s ease; }
   .speaking-photo:hover { transform: translateY(-4px); border-color: var(--acid); }
