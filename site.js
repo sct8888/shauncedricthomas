@@ -197,3 +197,52 @@ const observer = new IntersectionObserver((entries) => {
     window.addEventListener('load', layout);
     layout();
   })();
+
+/* Running carousel: native scroll-snap for swipe, JS only advances it every 4s and syncs the dots. */
+(function () {
+  const root = document.querySelector('.run-carousel');
+  if (!root) return;
+  const track = root.querySelector('.run-track');
+  const slides = [...track.querySelectorAll('.run-slide')];
+  const dotsWrap = root.querySelector('.run-dots');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const per = () => Math.max(1, Math.round(track.clientWidth / slides[0].getBoundingClientRect().width));
+  const maxIndex = () => Math.max(0, slides.length - Math.floor(per()));
+  let timer = null, held = false;
+  const dots = slides.map((_, i) => {
+    const d = document.createElement('button');
+    d.type = 'button'; d.className = 'run-dot'; d.setAttribute('role', 'tab');
+    d.setAttribute('aria-label', 'Photo ' + (i + 1));
+    d.addEventListener('click', () => { go(i); restart(); });
+    dotsWrap.appendChild(d); return d;
+  });
+  const current = () => {
+    const x = track.scrollLeft; let best = 0, bd = Infinity;
+    slides.forEach((s, i) => { const d = Math.abs(s.offsetLeft - track.offsetLeft - x); if (d < bd) { bd = d; best = i; } });
+    return best;
+  };
+  const sync = () => { const c = current(), m = maxIndex(); dots.forEach((d, i) => { d.hidden = i > m; d.setAttribute('aria-selected', i === c ? 'true' : 'false'); }); };
+  const go = (i) => {
+    const m = maxIndex(); if (i > m) i = 0; if (i < 0) i = m;
+    track.scrollTo({ left: slides[i].offsetLeft - track.offsetLeft, behavior: reduce.matches ? 'auto' : 'smooth' });
+  };
+  const next = () => go(current() + 1);
+  const stop = () => { clearInterval(timer); timer = null; };
+  const start = () => { stop(); if (!reduce.matches && !held && !document.hidden) timer = setInterval(next, 4000); };
+  const restart = () => start();
+  root.querySelector('.run-next').addEventListener('click', () => { next(); restart(); });
+  root.querySelector('.run-prev').addEventListener('click', () => { go(current() - 1); restart(); });
+  let raf; track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(sync); }, { passive: true });
+  const hold = (v) => { held = v; v ? stop() : start(); };
+  root.addEventListener('mouseenter', () => hold(true));
+  root.addEventListener('mouseleave', () => hold(false));
+  root.addEventListener('focusin', () => hold(true));
+  root.addEventListener('focusout', (e) => { if (!root.contains(e.relatedTarget)) hold(false); });
+  track.addEventListener('touchstart', () => hold(true), { passive: true });
+  track.addEventListener('touchend', () => setTimeout(() => hold(false), 2500), { passive: true });
+  track.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') { e.preventDefault(); next(); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(current() - 1); } });
+  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  reduce.addEventListener && reduce.addEventListener('change', start);
+  window.addEventListener('resize', sync);
+  sync(); start();
+})();
