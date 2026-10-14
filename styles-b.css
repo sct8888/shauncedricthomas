@@ -37,6 +37,7 @@
   .speaking-content { display: flex; flex-direction: column; gap: 48px; }
   .speaking-lede { font-size: 22px; line-height: 1.45; max-width: 760px; color: rgba(244,239,230,0.85); }
   .speaking-lede strong { color: var(--paper); font-weight: 500; }
+  .off-clock-aside { margin-top: 28px; font-size: 16px; color: rgba(244,239,230,0.6); }
   .speaking-photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
   .speaking-photo { position: relative; border: 1px solid var(--line); padding: 10px; background: #15191F; transition: transform 0.4s ease, border-color 0.4s ease; }
   .speaking-photo:hover { transform: translateY(-4px); border-color: var(--acid); }
