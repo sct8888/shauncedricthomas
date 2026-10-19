@@ -32,6 +32,7 @@
   .run-slide { flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per)); scroll-snap-align: start; }
   .run-slide .off-clock-photo { margin: 0; }
   .run-slide img { height: auto; }
+  .run-slide img[src*="running-mandela-marathon"] { object-position: 50% 30%; }
   .run-slide img[src*="running-50km"] { object-position: 50% 40%; }
   .run-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 20px; }
   .run-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--paper); cursor: pointer; transition: all 0.3s ease; font-size: 13px; }
